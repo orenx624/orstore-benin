@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="3bTbJcBZ_sO_ZGqH0heyiZv2CclP2WAHxs_oi0N7dqY">
+  <title>OrStore Bénin — Le marché numérique béninois</title>
+
+  <!-- Polices -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Feuilles de style -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/home.css">
+  <link rel="stylesheet" href="styles/seller.css">
+  <link rel="stylesheet" href="styles/modals.css">
+  <link rel="stylesheet" href="styles/utils.css">
+
+  <!-- Application (module ES6) -->
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     ÉCRAN 1 — CHOIX DU RÔLE
+════════════════════════════════════ -->
+<div id="sc-role" class="screen active">
+  <div class="role-card">
+    <div class="role-logo">Or<em>Store</em></div>
+    <p class="role-sub">Le marché numérique béninois 🇧🇯</p>
+    <p class="role-ask">Veuillez choisir votre rôle :</p>
+    <button class="btn-role btn-buyer"  onclick="chooseRole('buyer')">🛒 Acheteur / Visiteur</button>
+    <button class="btn-role btn-seller" onclick="chooseRole('seller')">🏪 Vendeur</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     ÉCRAN 2 — CONNEXION
+════════════════════════════════════ -->
+<div id="sc-login" class="screen">
+  <div class="auth-top">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h1><em>Or</em>Store Bénin</h1>
+  </div>
+  <div class="auth-body">
+    <h2>Connexion à votre compte</h2>
+    <div class="error-msg" id="log-err"></div>
+    <div class="fg"><label>Email</label><input type="email" id="log-email" placeholder="votre@email.com"></div>
+    <div class="fg"><label>Mot de passe</label><input type="password" id="log-pw" placeholder="••••••••"></div>
+    <button id="btn-log" class="btn-primary" data-label="Se connecter" onclick="firebaseLogin()">Se connecter</button>
+    <p class="auth-link">Pas encore de compte ? <a onclick="navigateScreen('register')">S'inscrire</a></p>
+    <p class="auth-link" style="margin-top:10px"><a onclick="goBack()" style="color:var(--muted)">← Retour</a></p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     ÉCRAN 3 — INSCRIPTION
+════════════════════════════════════ -->
+<div id="sc-register" class="screen">
+  <div class="auth-top">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h1>Inscription — <em>Or</em>Store</h1>
+  </div>
+  <div class="auth-body">
+    <h2>Créer un compte OrStore Bénin</h2>
+    <div class="error-msg" id="reg-err"></div>
+    <div class="fg"><label>Nom et Prénoms *</label><input type="text" id="reg-name" placeholder="Ex : Koffi Amédé Jean"></div>
+    <div class="fg"><label>Email *</label><input type="email" id="reg-email" placeholder="votre@email.com"></div>
+    <div class="fg"><label>Téléphone</label><input type="tel" placeholder="+229 97 00 00 00"></div>
+    <div class="fg"><label>Mot de passe * (min. 6 car.)</label><input type="password" id="reg-pw" placeholder="••••••••"></div>
+    <div class="fg"><label>Confirmer le mot de passe *</label><input type="password" id="reg-pw2" placeholder="••••••••"></div>
+    <button id="btn-reg" class="btn-primary" data-label="S'inscrire" onclick="firebaseRegister()">S'inscrire</button>
+    <p class="auth-link">Déjà un compte ? <a onclick="navigateScreen('login')">Se connecter</a></p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     ÉCRAN 4 — ACCUEIL ACHETEUR
+════════════════════════════════════ -->
+<div id="sc-home" class="screen">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-logo">Or<em>Store</em></div>
+    <form class="search-form" id="search-form" onsubmit="doSearch(event)">
+      <input type="text" id="search-input" placeholder="Rechercher…" autocomplete="off">
+      <button type="submit">🔍</button>
+    </form>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="openCart()">
+        🛒<span class="cart-badge">0</span>
+      </button>
+      <button class="user-avatar" id="user-avatar" onclick="openUserMenu()">👤</button>
+    </div>
+  </nav>
+
+  <!-- Subnav -->
+  <div class="subnav">
+    <a class="active" onclick="goHome()">🏠 Accueil</a>
+    <a onclick="showCatList()">🗂️ Catégories</a>
+    <a onclick="showPromos()">🔥 Promotions</a>
+    <a onclick="showNouveautes()">✨ Nouveautés</a>
+    <a onclick="showContact()">📞 Contact</a>
+  </div>
+
+  <!-- ─── SECTIONS ─── -->
+  <div class="home-content">
+
+    <!-- ACCUEIL -->
+    <div class="home-section" id="sec-accueil">
+      <div class="hero">
+        <h1>Bienvenue sur OrStore Bénin</h1>
+        <p>Le plus grand marché numérique béninois</p>
+        <button class="hero-btn" onclick="showPromos()">Voir les promotions 🔥</button>
+      </div>
+
+      <!-- Catégories rapides -->
+      <div class="sec-head" style="padding-top:22px">
+        <span class="sec-h">Catégories</span>
+        <a class="sec-lnk" onclick="showCatList()">Toutes →</a>
+      </div>
+      <div class="cats-grid">
+        <div class="cat-tile" onclick="showCat('Électronique')"><div class="ct-icon">📱</div><div class="ct-name">Électronique</div></div>
+        <div class="cat-tile" onclick="showCat('Vêtements')">  <div class="ct-icon">👗</div><div class="ct-name">Vêtements</div></div>
+        <div class="cat-tile" onclick="showCat('Accessoires')"><div class="ct-icon">👜</div><div class="ct-name">Accessoires</div></div>
+        <div class="cat-tile" onclick="showCat('Beauté')">     <div class="ct-icon">💄</div><div class="ct-name">Beauté</div></div>
+        <div class="cat-tile" onclick="showCat('Maison')">     <div class="ct-icon">🏠</div><div class="ct-name">Maison</div></div>
+        <div class="cat-tile" onclick="showCat('Alimentation')"><div class="ct-icon">🥗</div><div class="ct-name">Alimentation</div></div>
+        <div class="cat-tile" onclick="showCat('Sport')">      <div class="ct-icon">⚽</div><div class="ct-name">Sport</div></div>
+      </div>
+
+      <!-- Bannière promo -->
+      <div class="promo-banner" style="margin-top:10px">
+        <div class="pb-badge">🔥 Offre limitée</div>
+        <h3>Soldes jusqu'à −40%</h3>
+        <p>Électronique, mode, maison et plus encore</p>
+      </div>
+
+      <!-- Produits en vedette -->
+      <div class="sec-head" style="padding-top:22px">
+        <span class="sec-h">⭐ Produits en vedette</span>
+        <a class="sec-lnk" onclick="showCatList()">Voir tout →</a>
+      </div>
+      <div id="row-featured"></div>
+
+      <!-- Nouveautés -->
+      <div class="sec-head">
+        <span class="sec-h">✨ Nouveautés</span>
+        <a class="sec-lnk" onclick="showNouveautes()">Voir tout →</a>
+      </div>
+      <div id="row-new"></div>
+
+      <!-- ✅ Bannière inscription — masquée si connecté (id="auth-banner") -->
+      <div id="auth-banner" style="margin:16px 18px 8px;background:linear-gradient(135deg,var(--dark),#2A2A5E);border-radius:18px;padding:24px 20px;color:#fff">
+        <p style="font-family:Sora,sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:6px">Rejoignez OrStore ! 🇧🇯</p>
+        <p style="font-size:.85rem;opacity:.75;margin-bottom:14px">Créez votre compte pour accéder à toutes les fonctionnalités</p>
+        <button class="btn-primary" style="max-width:200px;margin:0" onclick="navigateScreen('register')">Créer un compte</button>
+      </div>
+
+      <div style="height:72px"></div>
+    </div><!-- /sec-accueil -->
+
+    <!-- LISTE CATÉGORIES -->
+    <div class="home-section" id="sec-catlist">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Retour</a>
+        <h2>🗂️ Toutes les catégories</h2>
+        <p>Choisissez une catégorie pour explorer</p>
+      </div>
+      <div class="catlist-grid">
+        <div class="catlist-tile" onclick="showCat('Électronique')"><div class="catlist-icon">📱</div><div><div class="catlist-name">Électronique</div><div class="catlist-count" id="cc-elec"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Vêtements')">  <div class="catlist-icon">👗</div><div><div class="catlist-name">Vêtements</div>  <div class="catlist-count" id="cc-vete"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Accessoires')"><div class="catlist-icon">👜</div><div><div class="catlist-name">Accessoires</div><div class="catlist-count" id="cc-acce"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Beauté')">     <div class="catlist-icon">💄</div><div><div class="catlist-name">Beauté</div>     <div class="catlist-count" id="cc-beau"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Maison')">     <div class="catlist-icon">🏠</div><div><div class="catlist-name">Maison</div>     <div class="catlist-count" id="cc-mais"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Alimentation')"><div class="catlist-icon">🥗</div><div><div class="catlist-name">Alimentation</div><div class="catlist-count" id="cc-alim"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Sport')">      <div class="catlist-icon">⚽</div><div><div class="catlist-name">Sport</div>      <div class="catlist-count" id="cc-spor"></div></div></div>
+      </div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- CATÉGORIE PRODUITS -->
+    <div class="home-section" id="sec-category">
+      <div class="page-header">
+        <a class="back-link" onclick="showCatList()">← Catégories</a>
+        <h2 id="cat-title">Catégorie</h2>
+        <p id="cat-count"></p>
+      </div>
+      <div id="cat-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- PROMOTIONS -->
+    <div class="home-section" id="sec-promos">
+      <div class="page-header" style="background:linear-gradient(135deg,#FFF8EC,#FFF3D6)">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2>🔥 Promotions</h2>
+        <p id="promo-count"></p>
+      </div>
+      <div id="promo-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- NOUVEAUTÉS -->
+    <div class="home-section" id="sec-nouveautes">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2>✨ Nouveautés</h2>
+        <p id="news-count"></p>
+      </div>
+      <div id="news-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- RECHERCHE -->
+    <div class="home-section" id="sec-search">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2 id="search-title">Résultats</h2>
+      </div>
+      <div id="search-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="home-section" id="sec-contact">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2>📞 Contactez-nous</h2>
+        <p>OrStore Bénin — support client</p>
+      </div>
+      <div class="contact-wrap">
+        <div class="contact-info">
+          <h3>📍 Informations de contact</h3>
+          <div class="ci-row"><span class="ci-icon">📱</span><div><strong>+229 97 00 00 00</strong><br><span style="color:var(--muted);font-size:.82rem">Lun–Sam, 8h–20h</span></div></div>
+          <div class="ci-row"><span class="ci-icon">✉️</span><div><strong>contact@orstore.bj</strong><br><span style="color:var(--muted);font-size:.82rem">Réponse sous 24h</span></div></div>
+          <div class="ci-row"><span class="ci-icon">📍</span><div><strong>Cotonou, Bénin</strong><br><span style="color:var(--muted);font-size:.82rem">Siège social Haie Vive</span></div></div>
+          <div class="contact-socials">
+            <button class="social-btn sb-wa" onclick="toast('WhatsApp — bientôt disponible')">💬 WhatsApp</button>
+            <button class="social-btn sb-fb" onclick="toast('Facebook — bientôt disponible')">📘 Facebook</button>
+            <button class="social-btn sb-tg" onclick="toast('Telegram — bientôt disponible')">✈️ Telegram</button>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>✉️ Envoyer un message</h3>
+          <form onsubmit="submitContact(event)">
+            <div class="fg"><label>Votre nom</label><input type="text" placeholder="Ex : Koffi Jean" required></div>
+            <div class="fg"><label>Email</label><input type="email" placeholder="votre@email.com" required></div>
+            <div class="fg">
+              <label>Sujet</label>
+              <select>
+                <option>Commande / Livraison</option>
+                <option>Problème avec un produit</option>
+                <option>Devenir vendeur</option>
+                <option>Signaler une fraude</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="fg"><label>Message</label><textarea placeholder="Décrivez votre problème ou question…" required></textarea></div>
+            <button type="submit" class="btn-primary">Envoyer le message</button>
+          </form>
+        </div>
+      </div>
+      <div style="height:72px"></div>
+    </div>
+
+  </div><!-- /home-content -->
+
+  <!-- Bottom nav -->
+  <nav class="bottom-nav">
+    <button class="bnav-item active"  onclick="goHome()">     <span class="bi">🏠</span><span class="bl">Accueil</span></button>
+    <button class="bnav-item"         onclick="showCatList()"> <span class="bi">🗂️</span><span class="bl">Catégories</span></button>
+    <button class="bnav-item"         onclick="openCart()">
+      <span class="bi">🛒<span class="cart-badge" style="font-size:.55rem">0</span></span>
+      <span class="bl">Panier</span>
+    </button>
+    <button class="bnav-item"         onclick="showPromos()">  <span class="bi">🔥</span><span class="bl">Promos</span></button>
+    <button class="bnav-item"         onclick="openUserMenu()"><span class="bi">👤</span><span class="bl">Profil</span></button>
+  </nav>
+
+</div><!-- /sc-home -->
+
+<!-- ════════════════════════════════════
+     ÉCRAN 5 — TABLEAU DE BORD VENDEUR
+════════════════════════════════════ -->
+<div id="sc-seller" class="screen">
+  <div class="seller-top">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2>👋 Bonjour, <span id="seller-username">Vendeur</span> !</h2>
+        <p>Tableau de bord OrStore Bénin</p>
+      </div>
+      <button onclick="firebaseLogout()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:8px 13px;border-radius:10px;font-family:Outfit;font-weight:600;font-size:.83rem">Déconnexion</button>
+    </div>
+  </div>
+  <div class="seller-stats">
+    <div class="sstat"><div class="si">📦</div><div class="sv" id="s-prod-count">—</div><div class="sl">Produits</div></div>
+    <div class="sstat"><div class="si">🛒</div><div class="sv">0</div><div class="sl">Commandes</div></div>
+    <div class="sstat"><div class="si">💰</div><div class="sv">—</div><div class="sl">Revenus FCFA</div></div>
+  </div>
+  <div class="seller-body">
+    <button class="btn-add"     onclick="openModal('modal-ap')">➕ Ajouter un produit</button>
+    <button class="btn-outline" style="margin-bottom:18px" onclick="chooseRole('buyer')">🛒 Voir la boutique</button>
+    <div class="sec-lbl">Mes produits</div>
+    <div id="my-products-list"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="bnav-item active"><span class="bi">🏪</span><span class="bl">Boutique</span></button>
+    <button class="bnav-item" onclick="toast('Commandes — bientôt disponible')"><span class="bi">📥</span><span class="bl">Commandes</span></button>
+    <button class="bnav-item" onclick="openModal('modal-ap')"><span class="bi">➕</span><span class="bl">Ajouter</span></button>
+    <button class="bnav-item" onclick="toast('Messages — bientôt disponible')"><span class="bi">💬</span><span class="bl">Messages</span></button>
+    <button class="bnav-item" onclick="firebaseLogout()"><span class="bi">🚪</span><span class="bl">Quitter</span></button>
+  </nav>
+</div>
+
+<!-- ════════════════════════════════════
+     MODALS
+════════════════════════════════════ -->
+
+<!-- Détail produit -->
+<div class="modal-overlay" id="modal-pdl" onclick="closeModal('modal-pdl')">
+  <div class="modal" style="padding:0;border-radius:26px 26px 0 0;overflow:hidden" onclick="event.stopPropagation()">
+    <div id="pdl-content"></div>
+    <button class="modal-x" onclick="closeModal('modal-pdl')">✕</button>
+  </div>
+</div>
+
+<!-- Panier -->
+<div class="modal-overlay" id="modal-cart" onclick="closeModal('modal-cart')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <h3>🛒 Mon Panier</h3>
+    <div id="cart-items"></div>
+    <div id="cart-footer"></div>
+  </div>
+</div>
+
+<!-- Menu utilisateur / Profil -->
+<div class="modal-overlay" id="modal-user" onclick="closeModal('modal-user')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="um-info">
+      <div class="um-av" id="um-av">👤</div>
+      <div>
+        <div class="um-name"  id="um-name">Non connecté</div>
+        <div class="um-email" id="um-email">Connectez-vous pour plus de fonctionnalités</div>
+      </div>
+    </div>
+    <!-- Boutons si NON connecté -->
+    <div id="um-out">
+      <button class="btn-primary" onclick="closeModal('modal-user');navigateScreen('login')"    style="margin-bottom:10px">Se connecter</button>
+      <button class="btn-outline"  onclick="closeModal('modal-user');navigateScreen('register')">Créer un compte</button>
+    </div>
+    <!-- Menu si connecté -->
+    <div id="um-in" style="display:none">
+      <button class="menu-item" onclick="toast('Mes commandes — bientôt disponible')"><span class="mi">📦</span>Mes commandes</button>
+      <button class="menu-item" onclick="toast('Mes favoris — bientôt disponible')">  <span class="mi">❤️</span>Mes favoris</button>
+      <button class="menu-item" onclick="toast('Paramètres — bientôt disponible')">   <span class="mi">⚙️</span>Paramètres</button>
+      <div class="divider"></div>
+      <button class="menu-item danger" onclick="closeModal('modal-user');firebaseLogout()"><span class="mi">🚪</span>Déconnexion</button>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Ajouter un produit (vendeur) — avec upload image -->
+<div class="modal-overlay" id="modal-ap" onclick="closeModal('modal-ap')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <h3>➕ Ajouter un produit</h3>
+    <div class="error-msg" id="ap-err"></div>
+
+    <!-- Photo du produit -->
+    <div class="fg">
+      <label>📸 Photo du produit (optionnel)</label>
+      <label class="file-input-label">
+        <span id="ap-image-label">📁 Choisir une image…</span>
+        <input type="file" id="ap-image" accept="image/*"
+          onchange="document.getElementById('ap-image-label').textContent = this.files[0]?.name || '📁 Choisir une image…'">
+      </label>
+      <div class="image-preview" id="ap-image-preview"></div>
+    </div>
+
+    <!-- Icône emoji (si pas d'image) -->
+    <div class="fg">
+      <label>Icône (si pas de photo)</label>
+      <div class="emoji-row">
+        <button class="em-btn active" onclick="setEmoji(this,'📦')">📦</button>
+        <button class="em-btn" onclick="setEmoji(this,'📱')">📱</button>
+        <button class="em-btn" onclick="setEmoji(this,'💻')">💻</button>
+        <button class="em-btn" onclick="setEmoji(this,'👗')">👗</button>
+        <button class="em-btn" onclick="setEmoji(this,'👜')">👜</button>
+        <button class="em-btn" onclick="setEmoji(this,'💄')">💄</button>
+        <button class="em-btn" onclick="setEmoji(this,'🏠')">🏠</button>
+        <button class="em-btn" onclick="setEmoji(this,'🥗')">🥗</button>
+        <button class="em-btn" onclick="setEmoji(this,'⚽')">⚽</button>
+        <button class="em-btn" onclick="setEmoji(this,'🎧')">🎧</button>
+        <button class="em-btn" onclick="setEmoji(this,'👟')">👟</button>
+        <button class="em-btn" onclick="setEmoji(this,'🧴')">🧴</button>
+      </div>
+      <input type="hidden" id="ap-emoji" value="📦">
+    </div>
+
+    <div class="fg"><label>Nom du produit *</label><input type="text" id="ap-name" placeholder="Ex : iPhone 15 Pro 256Go"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="fg"><label>Prix (FCFA) *</label>        <input type="number" id="ap-price" placeholder="195000"></div>
+      <div class="fg"><label>Prix original (si promo)</label><input type="number" id="ap-orig"  placeholder="220000"></div>
+    </div>
+    <div class="fg">
+      <label>Catégorie *</label>
+      <select id="ap-cat">
+        <option value="">-- Choisir --</option>
+        <option>Électronique</option>
+        <option>Vêtements</option>
+        <option>Accessoires</option>
+        <option>Beauté</option>
+        <option>Maison</option>
+        <option>Alimentation</option>
+        <option>Sport</option>
+      </select>
+    </div>
+    <div class="fg"><label>Description *</label><textarea id="ap-desc" placeholder="Décrivez votre produit (caractéristiques, état, dimensions…)"></textarea></div>
+    <div class="fg"><label>Localisation</label><input type="text" id="ap-loc" placeholder="Ex : Cotonou, Bénin"></div>
+    <button id="btn-ap" class="btn-primary" data-label="Publier le produit" onclick="submitProduct()">Publier le produit</button>
+  </div>
+</div>
+
+<!-- Toast global -->
+<div class="toast" id="toast"></div>
+
+</body>
+</html>
