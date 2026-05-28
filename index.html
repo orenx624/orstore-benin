@@ -47,8 +47,8 @@
     <div class="error-msg" id="log-err"></div>
     <div class="fg"><label>Email</label><input type="email" id="log-email" placeholder="votre@email.com"></div>
     <div class="fg"><label>Mot de passe</label><input type="password" id="log-pw" placeholder="••••••••"></div>
-    <button id="btn-log" class="btn-primary" data-label="Se connecter" onclick="firebaseLogin()">Se connecter</button>
-    <p class="auth-link">Pas encore de compte ? <a onclick="screen('register')">S'inscrire</a></p>
+    <p class="auth-link">Déjà un compte ? <a onclick="navigate('login')">Se connecter</a></p>
+    <p class="auth-link">Pas encore de compte ? <a onclick="navigate('register')">S'inscrire</a></p>
     <p class="auth-link" style="margin-top:10px"><a onclick="goBack()" style="color:var(--muted)">← Retour</a></p>
   </div>
 </div>
@@ -348,7 +348,7 @@
     </div>
     <!-- Boutons si NON connecté -->
     <div id="um-out">
-      <button class="btn-primary" onclick="closeModal('modal-user');screen('login')"    style="margin-bottom:10px">Se connecter</button>
+      <button class="btn-primary" onclick="closeModal('modal-user');navigate('login')" style="margin-bottom:10px">Se connecter</button>
       <button class="btn-outline"  onclick="closeModal('modal-user');screen('register')">Créer un compte</button>
     </div>
     <!-- Menu si connecté -->
