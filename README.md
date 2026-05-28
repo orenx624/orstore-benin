@@ -5,7 +5,14 @@
 ```
 orstore-benin/
 │
-├── index.html              ← Page principale (HTML pur, sans CSS ni JS inline)
+├── index.html              ← Page principale fragmentée avec placeholders pour partials
+│
+├── partials/              ← Fragments HTML chargés dynamiquement
+│   ├── role.html           ← Écran de choix du rôle
+│   ├── auth.html           ← Écrans connexion / inscription
+│   ├── home.html           ← Page d'accueil et sections publiques
+│   ├── seller.html         ← Tableau de bord vendeur
+│   └── modals.html         ← Toutes les modals (panier, user, produit, ajout)
 │
 ├── styles/
 │   ├── main.css            ← Variables CSS, reset, écrans role & auth
@@ -26,7 +33,8 @@ orstore-benin/
     ├── render.js           ← Cartes produits, grilles, renderHome, renderSellerProducts
     ├── navigation.js       ← Changements d'écran, sections (showCat, showPromos…)
     ├── search.js           ← Recherche en temps réel
-    └── modals.js           ← open/close modal, détail produit, menu user
+    ├── modals.js           ← open/close modal, détail produit, menu user
+    └── html-loader.js      ← Chargement dynamique des fragments HTML
 ```
 
 ---
@@ -39,6 +47,7 @@ orstore-benin/
 | Modifier le style des cartes produits | `styles/home.css` → `.product-card` |
 | Modifier le dashboard vendeur | `styles/seller.css` |
 | Ajouter une modal | `styles/modals.css` + `js/modals.js` |
+| Modifier le HTML fragmenté | `partials/*.html` + `js/html-loader.js` |
 | Changer la config Firebase | `js/config.js` |
 | Ajouter des produits démo | `js/data.js` |
 | Modifier la logique du panier | `js/cart.js` |

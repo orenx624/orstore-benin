@@ -1,0 +1,32 @@
+<!-- ════════════════════════════════════
+     ÉCRAN 5 — TABLEAU DE BORD VENDEUR
+════════════════════════════════════ -->
+<div id="sc-seller" class="screen">
+  <div class="seller-top">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <h2>👋 Bonjour, <span id="seller-username">Vendeur</span> !</h2>
+        <p>Tableau de bord OrStore Bénin</p>
+      </div>
+      <button onclick="firebaseLogout()" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:8px 13px;border-radius:10px;font-family:Outfit;font-weight:600;font-size:.83rem">Déconnexion</button>
+    </div>
+  </div>
+  <div class="seller-stats">
+    <div class="sstat"><div class="si">📦</div><div class="sv" id="s-prod-count">—</div><div class="sl">Produits</div></div>
+    <div class="sstat"><div class="si">🛒</div><div class="sv">0</div><div class="sl">Commandes</div></div>
+    <div class="sstat"><div class="si">💰</div><div class="sv">—</div><div class="sl">Revenus FCFA</div></div>
+  </div>
+  <div class="seller-body">
+    <button class="btn-add"     onclick="openModal('modal-ap')">➕ Ajouter un produit</button>
+    <button class="btn-outline" style="margin-bottom:18px" onclick="goHome()">🛒 Voir la boutique</button>
+    <div class="sec-lbl">Mes produits</div>
+    <div id="my-products-list"></div>
+  </div>
+  <nav class="bottom-nav">
+    <button class="bnav-item active"><span class="bi">🏪</span><span class="bl">Boutique</span></button>
+    <button class="bnav-item" onclick="toast('Commandes — bientôt disponible')"><span class="bi">📥</span><span class="bl">Commandes</span></button>
+    <button class="bnav-item" onclick="openModal('modal-ap')"><span class="bi">➕</span><span class="bl">Ajouter</span></button>
+    <button class="bnav-item" onclick="toast('Messages — bientôt disponible')"><span class="bi">💬</span><span class="bl">Messages</span></button>
+    <button class="bnav-item" onclick="firebaseLogout()"><span class="bi">🚪</span><span class="bl">Quitter</span></button>
+  </nav>
+</div>

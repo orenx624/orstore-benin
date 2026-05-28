@@ -29,4 +29,7 @@ export function doSearch(e) {
   document.getElementById('sec-search').style.display = 'block';
   document.querySelector('.home-content')?.scrollTo(0, 0);
   document.querySelectorAll('.subnav a').forEach(a => a.classList.remove('active'));
+  
+  // Sauvegarder la section
+  localStorage.setItem('orstore_section', 'sec-search');
 }

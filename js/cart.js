@@ -4,6 +4,40 @@
 import { S }     from './state.js';
 import { toast } from './utils.js';
 
+const WHATSAPP_PHONE = '22997000000';
+const WHATSAPP_LABEL = '+229 97 00 00 00';
+
+function buildWhatsAppMessage() {
+  const total = S.cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const lines = [
+    'Bonjour OrStore, je souhaite passer une commande via WhatsApp :',
+    '',
+    '🛒 Détails du panier :'
+  ];
+
+  S.cart.forEach((item, index) => {
+    lines.push(`${index + 1}. ${item.name} x${item.qty} — ${(item.price * item.qty).toLocaleString('fr-FR')} FCFA`);
+  });
+
+  lines.push('', `Total : ${total.toLocaleString('fr-FR')} FCFA`, '', 'Adresse de livraison :', '(Merci de préciser votre adresse ici)', '', 'Merci !');
+  return lines.join('\n');
+}
+
+export function checkoutWhatsApp() {
+  if (S.cart.length === 0) {
+    return toast('Votre panier est vide. Ajoutez un produit avant de commander.');
+  }
+  const message = buildWhatsAppMessage();
+  const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
+export function openWhatsAppChat() {
+  const message = 'Bonjour OrStore, j’ai une question sur une commande.';
+  const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
 /* ── Sauvegarde le panier dans localStorage ── */
 export function saveCart() {
   localStorage.setItem('orstore_cart', JSON.stringify(S.cart));
@@ -97,8 +131,8 @@ export function renderCart() {
       <span>Total</span><strong>${total.toLocaleString('fr-FR')} FCFA</strong>
     </div>
     <button class="btn-primary" style="margin-top:16px"
-      onclick="toast('Paiement Mobile Money — bientôt disponible ! 💳')">
-      💳 Commander maintenant
+      onclick="checkoutWhatsApp()">
+      💳 Commander maintenant via WhatsApp
     </button>
     <button class="btn-outline" style="margin-top:10px"
       onclick="S.cart=[];saveCart();updateBadge();renderCart()">

@@ -1,0 +1,205 @@
+<!-- ════════════════════════════════════
+     ÉCRAN 4 — ACCUEIL ACHETEUR
+════════════════════════════════════ -->
+<div id="sc-home" class="screen active">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-logo">Or<em>Store</em></div>
+    <form class="search-form" id="search-form" onsubmit="doSearch(event)">
+      <input type="text" id="search-input" placeholder="Rechercher…" autocomplete="off">
+      <button type="submit">🔍</button>
+    </form>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="openCart()">
+        🛒<span class="cart-badge">0</span>
+      </button>
+      <button class="user-avatar" id="user-avatar" onclick="openUserMenu()">👤</button>
+    </div>
+  </nav>
+
+  <!-- Subnav -->
+  <div class="subnav">
+    <a class="active" onclick="goHome()">🏠 Accueil</a>
+    <a onclick="showCatList()">🗂️ Catégories</a>
+    <a onclick="showPromos()">🔥 Promotions</a>
+    <a onclick="showNouveautes()">✨ Nouveautés</a>
+    <a onclick="showContact()">📞 Contact</a>
+  </div>
+
+  <!-- ─── SECTIONS ─── -->
+  <div class="home-content">
+
+    <!-- ACCUEIL -->
+    <div class="home-section" id="sec-accueil">
+      <div class="hero">
+        <h1>Bienvenue sur OrStore Bénin</h1>
+        <p>Le plus grand marché numérique béninois</p>
+        <button class="hero-btn" onclick="showPromos()">Voir les promotions 🔥</button>
+      </div>
+
+      <!-- Catégories rapides -->
+      <div class="sec-head" style="padding-top:22px">
+        <span class="sec-h">Catégories</span>
+        <a class="sec-lnk" onclick="showCatList()">Toutes →</a>
+      </div>
+      <div class="cats-grid">
+        <div class="cat-tile" onclick="showCat('Électronique')"><div class="ct-icon">📱</div><div class="ct-name">Électronique</div></div>
+        <div class="cat-tile" onclick="showCat('Vêtements')">  <div class="ct-icon">👗</div><div class="ct-name">Vêtements</div></div>
+        <div class="cat-tile" onclick="showCat('Accessoires')"><div class="ct-icon">👜</div><div class="ct-name">Accessoires</div></div>
+        <div class="cat-tile" onclick="showCat('Beauté')">     <div class="ct-icon">💄</div><div class="ct-name">Beauté</div></div>
+        <div class="cat-tile" onclick="showCat('Maison')">     <div class="ct-icon">🏠</div><div class="ct-name">Maison</div></div>
+        <div class="cat-tile" onclick="showCat('Alimentation')"><div class="ct-icon">🥗</div><div class="ct-name">Alimentation</div></div>
+        <div class="cat-tile" onclick="showCat('Sport')">      <div class="ct-icon">⚽</div><div class="ct-name">Sport</div></div>
+      </div>
+
+      <!-- Bannière promo -->
+      <div class="promo-banner" style="margin-top:10px">
+        <div class="pb-badge">🔥 Offre limitée</div>
+        <h3>Soldes jusqu'à −40%</h3>
+        <p>Électronique, mode, maison et plus encore</p>
+      </div>
+
+      <!-- Produits en vedette -->
+      <div class="sec-head" style="padding-top:22px">
+        <span class="sec-h">⭐ Produits en vedette</span>
+        <a class="sec-lnk" onclick="showCatList()">Voir tout →</a>
+      </div>
+      <div id="row-featured"></div>
+
+      <!-- Nouveautés -->
+      <div class="sec-head">
+        <span class="sec-h">✨ Nouveautés</span>
+        <a class="sec-lnk" onclick="showNouveautes()">Voir tout →</a>
+      </div>
+      <div id="row-new"></div>
+
+      <!-- ✅ Bannière inscription — masquée si connecté (id="auth-banner") -->
+      <div id="auth-banner" style="margin:16px 18px 8px;background:linear-gradient(135deg,var(--dark),#2A2A5E);border-radius:18px;padding:24px 20px;color:#fff">
+        <p style="font-family:Sora,sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:6px">Rejoignez OrStore ! 🇧🇯</p>
+        <p style="font-size:.85rem;opacity:.75;margin-bottom:14px">Créez votre compte pour accéder à toutes les fonctionnalités</p>
+        <button class="btn-primary" style="max-width:200px;margin:0" onclick="navigateScreen('register')">Créer un compte</button>
+      </div>
+
+      <div style="height:72px"></div>
+    </div><!-- /sec-accueil -->
+
+    <!-- LISTE CATÉGORIES -->
+    <div class="home-section" id="sec-catlist">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Retour</a>
+        <h2>🗂️ Toutes les catégories</h2>
+        <p>Choisissez une catégorie pour explorer</p>
+      </div>
+      <div class="catlist-grid">
+        <div class="catlist-tile" onclick="showCat('Électronique')"><div class="catlist-icon">📱</div><div><div class="catlist-name">Électronique</div><div class="catlist-count" id="cc-elec"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Vêtements')">  <div class="catlist-icon">👗</div><div><div class="catlist-name">Vêtements</div>  <div class="catlist-count" id="cc-vete"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Accessoires')"><div class="catlist-icon">👜</div><div><div class="catlist-name">Accessoires</div><div class="catlist-count" id="cc-acce"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Beauté')">     <div class="catlist-icon">💄</div><div><div class="catlist-name">Beauté</div>     <div class="catlist-count" id="cc-beau"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Maison')">     <div class="catlist-icon">🏠</div><div><div class="catlist-name">Maison</div>     <div class="catlist-count" id="cc-mais"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Alimentation')"><div class="catlist-icon">🥗</div><div><div class="catlist-name">Alimentation</div><div class="catlist-count" id="cc-alim"></div></div></div>
+        <div class="catlist-tile" onclick="showCat('Sport')">      <div class="catlist-icon">⚽</div><div><div class="catlist-name">Sport</div>      <div class="catlist-count" id="cc-spor"></div></div></div>
+      </div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- CATÉGORIE PRODUITS -->
+    <div class="home-section" id="sec-category">
+      <div class="page-header">
+        <a class="back-link" onclick="showCatList()">← Catégories</a>
+        <h2 id="cat-title">Catégorie</h2>
+        <p id="cat-count"></p>
+      </div>
+      <div id="cat-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- PROMOTIONS -->
+    <div class="home-section" id="sec-promos">
+      <div class="page-header" style="background:linear-gradient(135deg,#FFF8EC,#FFF3D6)">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2>🔥 Promotions</h2>
+        <p id="promo-count"></p>
+      </div>
+      <div id="promo-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- NOUVEAUTÉS -->
+    <div class="home-section" id="sec-nouveautes">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2>✨ Nouveautés</h2>
+        <p id="news-count"></p>
+      </div>
+      <div id="news-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- RECHERCHE -->
+    <div class="home-section" id="sec-search">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2 id="search-title">Résultats</h2>
+      </div>
+      <div id="search-grid"></div>
+      <div style="height:72px"></div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="home-section" id="sec-contact">
+      <div class="page-header">
+        <a class="back-link" onclick="goHome()">← Accueil</a>
+        <h2>📞 Contactez-nous</h2>
+        <p>OrStore Bénin — support client</p>
+      </div>
+      <div class="contact-wrap">
+        <div class="contact-info">
+          <h3>📍 Informations de contact</h3>
+          <div class="ci-row"><span class="ci-icon">📱</span><div><strong>+229 97 00 00 00</strong><br><span style="color:var(--muted);font-size:.82rem">Lun–Sam, 8h–20h</span></div></div>
+          <div class="ci-row"><span class="ci-icon">✉️</span><div><strong>contact@orstore.bj</strong><br><span style="color:var(--muted);font-size:.82rem">Réponse sous 24h</span></div></div>
+          <div class="ci-row"><span class="ci-icon">📍</span><div><strong>Cotonou, Bénin</strong><br><span style="color:var(--muted);font-size:.82rem">Siège social Haie Vive</span></div></div>
+          <div class="contact-socials">
+            <button class="social-btn sb-wa" onclick="openWhatsAppChat()">💬 WhatsApp</button>
+            <button class="social-btn sb-fb" onclick="toast('Facebook — bientôt disponible')">📘 Facebook</button>
+            <button class="social-btn sb-tg" onclick="toast('Telegram — bientôt disponible')">✈️ Telegram</button>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>✉️ Envoyer un message</h3>
+          <form onsubmit="submitContact(event)">
+            <div class="fg"><label>Votre nom</label><input type="text" placeholder="Ex : Koffi Jean" required></div>
+            <div class="fg"><label>Email</label><input type="email" placeholder="votre@email.com" required></div>
+            <div class="fg">
+              <label>Sujet</label>
+              <select>
+                <option>Commande / Livraison</option>
+                <option>Problème avec un produit</option>
+                <option>Devenir vendeur</option>
+                <option>Signaler une fraude</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="fg"><label>Message</label><textarea placeholder="Décrivez votre problème ou question…" required></textarea></div>
+            <button type="submit" class="btn-primary">Envoyer le message</button>
+          </form>
+        </div>
+      </div>
+      <div style="height:72px"></div>
+    </div>
+
+  </div><!-- /home-content -->
+
+  <!-- Bottom nav -->
+  <nav class="bottom-nav">
+    <button class="bnav-item active"  onclick="goHome()">     <span class="bi">🏠</span><span class="bl">Accueil</span></button>
+    <button class="bnav-item"         onclick="showCatList()"> <span class="bi">🗂️</span><span class="bl">Catégories</span></button>
+    <button class="bnav-item"         onclick="openCart()">
+      <span class="bi">🛒<span class="cart-badge" style="font-size:.55rem">0</span></span>
+      <span class="bl">Panier</span>
+    </button>
+    <button class="bnav-item"         onclick="showPromos()">  <span class="bi">🔥</span><span class="bl">Promos</span></button>
+    <button class="bnav-item"         onclick="openUserMenu()"><span class="bi">👤</span><span class="bl">Profil</span></button>
+  </nav>
+
+</div><!-- /sc-home -->

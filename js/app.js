@@ -9,8 +9,8 @@ import { S }                               from './state.js';
 import { toast }                           from './utils.js';
 import { initAuth, firebaseRegister, firebaseLogin, firebaseLogout } from './auth.js';
 import { loadProducts, submitProduct }     from './products.js';
-import { saveCart, updateBadge, addToCart, removeCart, qtyCart, renderCart } from './cart.js';
-import { navigateToScreen, goBack, chooseRole, showCatList, showCat, showPromos, showNouveautes, showContact, goHome } from './navigation.js';
+import { saveCart, updateBadge, addToCart, removeCart, qtyCart, renderCart, checkoutWhatsApp, openWhatsAppChat } from './cart.js';
+import { navigateToScreen, goBack, chooseRole, showCatList, showCat, showPromos, showNouveautes, showContact, goHome, getSavedRole, getSavedScreen, getSavedSection } from './navigation.js';
 import { doSearch }                        from './search.js';
 import { openModal, closeModal, openCart, openProduct, openUserMenu, submitContact } from './modals.js';
 
@@ -45,6 +45,8 @@ window.qtyCart        = qtyCart;
 window.saveCart       = saveCart;
 window.updateBadge    = updateBadge;
 window.renderCart     = renderCart;
+window.checkoutWhatsApp = checkoutWhatsApp;
+window.openWhatsAppChat = openWhatsAppChat;
 
 // Modals
 window.openModal      = openModal;
@@ -71,11 +73,45 @@ window.setEmoji = (btn, emoji) => {
 ══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
 
+  // Restaurer l'état précédent après actualisation
+  const savedRole = getSavedRole();
+  if (savedRole) S.role = savedRole;
+  const savedScreen = getSavedScreen();
+  const savedSection = getSavedSection();
+  if (savedScreen && savedScreen !== 'role') {
+    if (savedScreen === 'seller') {
+      chooseRole('seller');
+    } else {
+      navigateToScreen(savedScreen);
+    }
+  }
+
   // Panier
   updateBadge();
 
   // Charge les produits
   loadProducts();
+
+  // Restaurer la section dans home après chargement des produits
+  setTimeout(() => {
+    if (savedScreen === 'home' && savedSection) {
+      const sectionMap = {
+        'sec-accueil': goHome,
+        'sec-catlist': showCatList,
+        'sec-promos': showPromos,
+        'sec-nouveautes': showNouveautes,
+        'sec-contact': showContact,
+      };
+      if (sectionMap[savedSection]) {
+        sectionMap[savedSection]();
+      } else {
+        // Pour les sections dynamiques comme sec-category et sec-search, restaurer directement
+        document.querySelectorAll('.home-section').forEach(s => s.style.display = 'none');
+        const sec = document.getElementById(savedSection);
+        if (sec) sec.style.display = 'block';
+      }
+    }
+  }, 100);
 
   // Recherche
   document.getElementById('search-form')?.addEventListener('submit', doSearch);

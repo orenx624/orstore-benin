@@ -4,8 +4,37 @@
 import { S }                    from './state.js';
 import { grid }                 from './render.js';
 import { renderSellerProducts } from './render.js';
+import { btnLoad }              from './utils.js';
 
+const SCREEN_KEY   = 'orstore_screen';
+const SECTION_KEY  = 'orstore_section';
+const ROLE_KEY     = 'orstore_role';
 let _hist = [];
+
+function saveScreen(name) {
+  localStorage.setItem(SCREEN_KEY, name);
+}
+
+function saveSection(id) {
+  localStorage.setItem(SECTION_KEY, id);
+}
+
+export function saveRole(role) {
+  S.role = role;
+  localStorage.setItem(ROLE_KEY, role);
+}
+
+export function getSavedRole() {
+  return localStorage.getItem(ROLE_KEY) || 'buyer';
+}
+
+export function getSavedScreen() {
+  return localStorage.getItem(SCREEN_KEY);
+}
+
+export function getSavedSection() {
+  return localStorage.getItem(SECTION_KEY);
+}
 
 /* ── Navigue vers un écran principal ── */
 export function navigateToScreen(name) {
@@ -14,6 +43,11 @@ export function navigateToScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('sc-' + name).classList.add('active');
   document.querySelectorAll('.error-msg').forEach(e => { e.style.display = 'none'; e.textContent = ''; });
+  if (name === 'login' || name === 'register') {
+    btnLoad('btn-log', false);
+    btnLoad('btn-reg', false);
+  }
+  saveScreen(name);
   window.scrollTo(0, 0);
   if (name === 'seller') renderSellerProducts();
 }
@@ -24,14 +58,23 @@ export function goBack() {
     const prev = _hist.pop();
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(prev).classList.add('active');
+    const screenName = prev.replace(/^sc-/, '');
+    saveScreen(screenName);
+    if (screenName === 'login' || screenName === 'register') {
+      btnLoad('btn-log', false);
+      btnLoad('btn-reg', false);
+    }
   }
 }
 
 /* ── Choix du rôle (acheteur / vendeur) ── */
 export function chooseRole(role) {
-  S.role = role;
   if (role === 'seller') {
-    S.user ? navigateToScreen('seller') : navigateToScreen('login');
+    if (S.user && S.role === 'seller') {
+      navigateToScreen('seller');
+    } else {
+      navigateToScreen('login');
+    }
   } else {
     navigateToScreen('home');
   }
@@ -42,6 +85,7 @@ export function showSec(id) {
   document.querySelectorAll('.home-section').forEach(s => s.style.display = 'none');
   document.getElementById(id).style.display = 'block';
   document.querySelector('.home-content').scrollTo(0, 0);
+  saveSection(id);
 }
 
 /* ── Sections ── */
