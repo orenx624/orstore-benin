@@ -22,7 +22,7 @@ window.S              = S;
 window.toast          = toast;
 
 // Auth
-window.screen         = navigateToScreen;   // utilisé dans tout le HTML
+window.navigate         = navigateToScreen;   // utilisé dans tout le HTML
 window.goBack         = goBack;
 window.firebaseRegister = firebaseRegister;
 window.firebaseLogin  = firebaseLogin;
